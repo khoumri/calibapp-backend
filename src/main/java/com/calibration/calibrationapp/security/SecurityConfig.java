@@ -1,6 +1,8 @@
 package com.calibration.calibrationapp.security;
 
 import java.util.List;
+import org.springframework.session.web.http.CookieSerializer;
+import org.springframework.session.web.http.DefaultCookieSerializer;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +52,14 @@ public class SecurityConfig {
         return (request, response, exception) -> {
             response.setStatus(401);
         };
+    }
+
+    @Bean
+    public CookieSerializer cookieSerializer() {
+        DefaultCookieSerializer serializer = new DefaultCookieSerializer();
+        serializer.setSameSite("None");
+        serializer.setUseSecureCookie(true);
+        return serializer;
     }
 
     @Bean
