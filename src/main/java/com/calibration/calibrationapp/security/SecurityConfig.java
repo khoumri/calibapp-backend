@@ -78,15 +78,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "http://spkmaroc.com",
-                "https://spkmaroc.com",
-                "http://spkmaroc.com/calibapp",
-                "https://spkmaroc.com/calibapp"));
+        config.setAllowedOriginPatterns(List.of("https://spkmaroc.com", "http://spkmaroc.com"));
+        config.setAllowCredentials(true); // essentiel pour les cookies
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
