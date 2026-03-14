@@ -42,7 +42,11 @@ public class SecurityConfig {
     @Bean
     public AuthenticationSuccessHandler successHandler() {
         return (request, response, authentication) -> {
+            String role = authentication.getAuthorities()
+                    .iterator().next().getAuthority();
             response.setStatus(200);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"role\":\"" + role + "\"}");
         };
     }
 
