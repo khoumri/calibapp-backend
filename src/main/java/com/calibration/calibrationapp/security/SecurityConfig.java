@@ -31,9 +31,16 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginProcessingUrl("/login")
-                        .successHandler(successHandler()) // ← retourne 200 au lieu de 302
-                        .failureHandler(failureHandler()) // ← retourne 401 au lieu de redirect
-                        .permitAll());
+                        .successHandler(successHandler())
+                        .failureHandler(failureHandler())
+                        .permitAll())
+
+                // ✅ AJOUTER CE BLOC
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("https://spkmaroc.com/calibapp/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID"));
 
         return http.build();
     }
