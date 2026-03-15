@@ -46,7 +46,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOriginPatterns(
-                List.of("https://spkmaroc.com", "http://spkmaroc.com", "http://localhost:5173"));
+                List.of("https://a2m.ma/", "https://a2m.ma/", "http://localhost:5173"));
         config.setAllowCredentials(true);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
