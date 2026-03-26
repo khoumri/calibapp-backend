@@ -43,10 +43,10 @@ public class SecurityConfig {
     }
 
     @Bean
+
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(
-                List.of("https://a2m.ma/", "https://a2m.ma/", "http://localhost:5173"));
+        config.setAllowedOriginPatterns(List.of("*"));
         config.setAllowCredentials(true);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
