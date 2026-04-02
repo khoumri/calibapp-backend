@@ -18,25 +18,24 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
-    private final JwtUtil jwtUtil;
 
-    public SecurityConfig(JwtFilter jwtFilter, JwtUtil jwtUtil) {
+    public SecurityConfig(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
-        this.jwtUtil = jwtUtil;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                // CORS
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // Désactivation CSRF
                 .csrf(csrf -> csrf.disable())
+                // Session stateless (JWT)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // Autoriser toutes les requêtes pour test
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/api/me").authenticated()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/client/**").hasRole("CLIENT")
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
+                // Ajouter JWT filter
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -45,10 +44,16 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("https://a2m.ma", "http://localhost:5173"));
+        config.setAllowedOriginPatterns(List.of(
+                "http://localhost:5173", // dev local
+                "https://a2m.ma", // domaine prod
+                "https://app.a2m.ma",
+                "http://187.124.46.142:8080" // accès direct IP
+        ));
         config.setAllowCredentials(true);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
